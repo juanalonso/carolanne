@@ -101,7 +101,7 @@ void draw() {
             image(snapshot, camW, 0);
 
             noFill();
-            stroke(255);
+            stroke(235,40,40);
 
             PImage faceMain = video.get(faces[0].x, faces[0].y, faces[0].width, faces[0].height);
             PImage faceTreated = get (faces[0].x + camW, faces[0].y, faces[0].width, faces[0].height);
