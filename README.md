@@ -19,3 +19,9 @@ Keyboard shortcuts
 * T/t: toggle image thresholding
 * +: Increase threshold
 * B/b: increase blurring, from zero (no blurring) to ten
+
+#### Example of the sketch ouptut
+![Sketch output](https://pbs.twimg.com/media/CYYNWn0WkAEErcU.png)
+
+#### Faces found by the sketch
+![Some found faces](https://pbs.twimg.com/media/CYYNz8AWsAEkTkw.png)
