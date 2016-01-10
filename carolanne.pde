@@ -10,7 +10,6 @@ OpenCV opencv;
 Rectangle[] faces;
 
 int CV_POSTBLUR = 0;
-int CV_THRESHOLD = 180;
 int DELAY = 2000;
 
 int DETECT_MINNEIGHBOURS = 3;
@@ -21,8 +20,9 @@ int lastPicture = 0;
 int camW = 640, camH = 480;
 
 boolean doDilate = false;
-boolean doThreshold = false;
-int preblur = 0;
+boolean doThreshold = true;
+int preblur = 3;
+int thresvalue = 110;
 
 void setup() {
 
@@ -69,18 +69,20 @@ void draw() {
 
     opencv.loadImage(video);
 
-    if (preblur > 0) {
-        opencv.blur(preblur);
-    }
-
     if (doThreshold) {
-        opencv.threshold(CV_THRESHOLD);
+        opencv.threshold(thresvalue);
     }
 
     if (doDilate) {
         opencv.dilate();
         opencv.erode();
     }
+
+
+    if (preblur > 0) {
+        opencv.blur(preblur);
+    }
+
 
     faces = opencv.detect(1.1, DETECT_MINNEIGHBOURS, 0, DETECT_MINSIZE, DETECT_MAXSIZE);
     //faces = opencv.detect();
@@ -91,36 +93,46 @@ void draw() {
 
     PImage snapshot = opencv.getSnapshot();
 
-    image(video, 0, 0);
-    image(snapshot, camW-camW/3-5, camH-camH/3-5, camW/3, camH/3);
+    image(snapshot, 0, 0);
 
     if (faces.length > 0) {
-        
+
         if (millis()-lastPicture > DELAY) {
 
             image(snapshot, camW, 0);
-            
+
             noFill();
             stroke(255);
-            for (int i = 0; i < faces.length; i++) {
-                rect(faces[i].x + camW, faces[i].y, faces[i].width, faces[i].height);
-            }
 
-            String dateTime = String.format("%d%02d%02d_%02d%02d%02d.png", 
+            PImage faceMain = video.get(faces[0].x, faces[0].y, faces[0].width, faces[0].height);
+            PImage faceTreated = get (faces[0].x + camW, faces[0].y, faces[0].width, faces[0].height);
+            rect(faces[0].x + camW, faces[0].y, faces[0].width, faces[0].height);
+            PImage ocvImage = get (camW, 0, camW, camH);
+
+            //            for (int i = 0; i < faces.length; i++) {
+            //                rect(faces[i].x + camW, faces[i].y, faces[i].width, faces[i].height);
+            //            }
+
+            String dateTime = String.format("%d%02d%02d_%02d%02d%02d", 
             year(), month(), day(), 
             hour(), minute(), second()
                 );
 
-            PImage ocvImage = get (camW, 0, camW, camH);
-            ocvImage.save(dateTime);                
+            ocvImage.save(dateTime + ".png");                
+            faceMain.save(dateTime + "_m.png");                
+            faceTreated.save(dateTime + "_t.png");                
 
             lastPicture = millis();
         }
     }
+    
+    image(video, camW-camW/4-5, camH-camH/4-5, camW/4, camH/4);
 
+
+    fill(255);
     text("Dilate / Erode: " + (doDilate?"on":"off"), 4, 480 + 14);
-    text("Threshold: " + (doThreshold?"on":"off"), 133, 480 + 14);
-    text("Preblur: " + preblur, 240, 480 + 14);
+    text("Threshold: " + (doThreshold?"on":"off") + " (" +thresvalue+  ")", 140, 480 + 14);
+    text("Preblur: " + preblur, 280, 480 + 14);
 }
 
 void keyPressed() {
@@ -130,9 +142,14 @@ void keyPressed() {
     } else if (key=='t' || key=='T') {
         doThreshold = !doThreshold;
     } else if (key=='b' || key=='B') {
-        preblur+=2;
-        if (preblur>20) {
+        preblur++;
+        if (preblur>10) {
             preblur = 0;
+        }
+    }  else if (key=='+') {
+        thresvalue+=10;
+        if (thresvalue>255) {
+            thresvalue = 0;
         }
     }
 }
