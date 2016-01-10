@@ -12,17 +12,17 @@ Rectangle[] faces;
 int CV_POSTBLUR = 0;
 int DELAY = 2000;
 
-int DETECT_MINNEIGHBOURS = 3;
+int DETECT_MINNEIGHBOURS = 8;
 int DETECT_MINSIZE = 0;
 int DETECT_MAXSIZE = 100;
 
 int lastPicture = 0;
 int camW = 640, camH = 480;
 
-boolean doDilate = false;
+boolean doDilate = true;
 boolean doThreshold = true;
-int preblur = 3;
-int thresvalue = 110;
+int thresvalue = 190;
+int preblur = 4;
 
 void setup() {
 
@@ -77,7 +77,6 @@ void draw() {
         opencv.dilate();
         opencv.erode();
     }
-
 
     if (preblur > 0) {
         opencv.blur(preblur);
