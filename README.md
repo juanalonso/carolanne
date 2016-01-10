@@ -5,4 +5,4 @@ It all started when we where talking about an old restored TV: "I can only get w
 
 So, this project was born: Can a computer, using computer vision algorithms, detect faces in a TV displaying only white noise? Can a person identify those faces? Let’s see.
 
-The sketch, written in Processing 2.2.1, uses [Greg Borenstein’s](https://twitter.com/atduskgreg) OpenCV wrapper for Processing, available at [his GitHub repo](https://github.com/atduskgreg/opencv-processing)
+The sketch, written in Processing 2.2.1, uses [Greg Borenstein’s](https://twitter.com/atduskgreg) OpenCV wrapper for Processing, available at [his GitHub repo](https://github.com/atduskgreg/opencv-processing).
